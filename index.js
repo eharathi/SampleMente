@@ -71,7 +71,7 @@ app.get('/user', (request, response) => {
 	request.get
 	
 let rows;
- client.query('SELECT * from db0ub90g3jvpao.users;', (err, res) => {
+ client.query('SELECT * from users;', (err, res) => {
   if (err) console.log(err);
   // for (let row of res.rows) {
    console.log(JSON.stringify(res.rows));
