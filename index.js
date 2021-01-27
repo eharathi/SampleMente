@@ -3,6 +3,7 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 const { Client } = require('pg');
+const { Pool } = require('pg');
 
 
 let database_url = process.env.DATABASE_URL;
@@ -16,15 +17,13 @@ const client = new Client({
   	rejectUnauthorized: false
   }
 });
-client.connect();
+//client.connect();
 
-// const { Pool } = require('pg');
-// const pool = new Pool({
-//   connectionString: database_url,
-//   ssl: {
-//     rejectUnauthorized: false
-//   }
-// });
+
+const pool = new Pool({
+  connectionString: database_url,
+  ssl: false
+});
 
 
 var app = express();
@@ -69,20 +68,30 @@ console.log(JSON.stringify(rows))
 })
 
 
-app.get('/user', (request, response) => {
-	request.get
+app.get('/user', async (request, response) => {
 	
-let rows;
- client.query('SELECT * from users;', (err, res) => {
-  if (err) console.log(err);
-  // for (let row of res.rows) {
-   console.log(JSON.stringify(res.rows));
-  // }
-  rows = {"resultd":res.rows};
+	
+// let rows;
+//  client.query('SELECT * from users;', (err, res) => {
+//   if (err) console.log(err);
+//   // for (let row of res.rows) {
+//    console.log(JSON.stringify(res.rows));
+//   // }
+//   rows = {"resultd":res.rows};
 
-});
-
-  response.json({ info: 'Node.js, Express, and Postgres API wonderful'})
+// });
+try {
+      const client = await pool.connect();
+      const result = await client.query('SELECT * FROM user');
+      const results = { 'results': (result) ? result.rows : null};
+      response.send( results );
+      client.release();
+  }
+  catch (err){
+   console.error(err);
+   response.send({ info: 'Node.js, Express, and Postgres API wonderful'})
+  }
+  //response.json({ info: 'Node.js, Express, and Postgres API wonderful'})
 })
 app.listen(port);
 
