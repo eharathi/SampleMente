@@ -82,8 +82,9 @@ app.get('/user', async (request, response) => {
 // });
 try {
       const client = await pool.connect();
-      const result = await client.query('SELECT * FROM user');
+      const result = await client.query('SELECT * FROM db0ub90g3jvpao.users');
       const results = { 'results': (result) ? result.rows : null};
+      
       response.send( results );
       client.release();
   }
