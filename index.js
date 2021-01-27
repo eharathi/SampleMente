@@ -5,13 +5,24 @@ var path = require('path');
 const { Client } = require('pg');
 
 
+let database_url = process.env.DATABASE_URL;
+if (database_url == null || database_url == "") {
+  database_url = 'postgres://postgres:@localhost:5432/postgres';
+}
+console.log(database_url);
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  connectionString: database_url,
+  ssl: process.env.DATABASE_URL ? true : false
 });
+client.connect();
 
+// const { Pool } = require('pg');
+// const pool = new Pool({
+//   connectionString: database_url,
+//   ssl: {
+//     rejectUnauthorized: false
+//   }
+// });
 
 
 var app = express();
@@ -42,12 +53,14 @@ app.get('/', (request, response) => {
 	client.connect();
 let rows;
 client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
-  if (err) throw err;
-  for (let row of res.rows) {
-    console.log(JSON.stringify(row));
-  }
+  if (err){console.log(err);} else {
+  // 	for (let row of res.rows) {
+  //   console.log(JSON.stringify(row));
+  // }
   rows=res.rows;
   client.end();
+  }
+  
 });
 console.log(JSON.stringify(rows))
   response.json({ info: 'Node.js, Express, and Postgres API wonderful'})
@@ -55,17 +68,18 @@ console.log(JSON.stringify(rows))
 
 
 app.get('/user', (request, response) => {
-	client.connect();
+	request.get
+	
 let rows;
-client.query('SELECT * from users;', (err, res) => {
-  if (err) throw err;
-  for (let row of res.rows) {
-    console.log(JSON.stringify(row));
-  }
-  rows=res.rows;
-  client.end();
+ client.query('SELECT * from db0ub90g3jvpao.users;', (err, res) => {
+  if (err) console.log(err);
+  // for (let row of res.rows) {
+   console.log(JSON.stringify(res.rows));
+  // }
+  rows = {"resultd":res.rows};
+
 });
-console.log(JSON.stringify(rows))
+
   response.json({ info: 'Node.js, Express, and Postgres API wonderful'})
 })
 app.listen(port);
