@@ -12,7 +12,9 @@ if (database_url == null || database_url == "") {
 console.log(database_url);
 const client = new Client({
   connectionString: database_url,
-  ssl: process.env.DATABASE_URL ? true : false
+  ssl:{
+  	rejectUnauthorized: false
+  }
 });
 client.connect();
 
