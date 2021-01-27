@@ -21,6 +21,7 @@
   "homepage": "https://github.com/eharathi/SampleMente#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "express-session": "^1.17.1"
+    "express-session": "^1.17.1",
+    "pg": "^8.5.1"
   }
 }
