@@ -50,7 +50,7 @@ row1 = row;
   client.end();
 });
 
-  response.json({ info: 'Node.js, Express, and Postgres API'})
+  response.json({ info: 'Node.js, Express, and Postgres API wonderful'})
 })
 app.listen(port);
 
