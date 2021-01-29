@@ -1,0 +1,23 @@
+extends layout
+
+block content
+    div.text-center
+        div(class="form-signin")
+            div.text-center
+                p wellCome Dear #{username}!
+
+                table(class = "table table-bordered")
+                    thead
+                      tr
+                        th Name
+                        th CGPA
+                        th Attendence
+                    tbody
+                     each result in results
+                        tr 
+                            td=result.name
+                            td=result.cgpa 
+                            td=result.attendence
+                            
+                    
+                    
